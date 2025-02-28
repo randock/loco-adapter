@@ -11,6 +11,7 @@
 
 namespace Translation\PlatformAdapter\Loco\Bridge\Symfony\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -20,17 +21,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritdoc}
+     * @return TreeBuilder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('translation_adapter_loco');
-        // Keep compatibility with symfony/config < 4.2
-        if (!method_exists($treeBuilder, 'getRootNode')) {
-            $root = $treeBuilder->root('translation_adapter_loco');
-        } else {
-            $root = $treeBuilder->getRootNode();
-        }
+        $root = $treeBuilder->getRootNode();
 
         $root
             ->children()
@@ -49,17 +45,12 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
+     * @return NodeDefinition
      */
-    private function getProjectNode()
+    private function getProjectNode(): NodeDefinition
     {
         $treeBuilder = new TreeBuilder('projects');
-        // Keep compatibility with symfony/config < 4.2
-        if (!method_exists($treeBuilder, 'getRootNode')) {
-            $node = $treeBuilder->root('projects');
-        } else {
-            $node = $treeBuilder->getRootNode();
-        }
+        $node = $treeBuilder->getRootNode();
         $node
             ->useAttributeAsKey('name')
             ->prototype('array')
